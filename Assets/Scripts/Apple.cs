@@ -129,6 +129,7 @@ public class Apple : MonoBehaviour
 
     public void TotalDestroy()
     {
+        GameManager.OnMoveCompleted -= this.OnMove;
         Destroy(gameObject);
         Destroy(_outline.gameObject);
     }

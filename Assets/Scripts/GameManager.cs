@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     private int _finalLevel = 3;
 
     public GameState _state;
-    public float targetTime = 120.0f;
+    public float targetTime = 10.0f;
 
     public static event Action OnMoveCompleted;
 
@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour
         switch(_level)
         {
             case 1:
-                targetTime = 50f;
+                targetTime = 10f;
                 SpawnApples(6, 10);
                 break;
             case 2:
@@ -289,7 +289,8 @@ public class GameManager : MonoBehaviour
         {
             foreach(Apple apple in row)
             {
-                apple.TotalDestroy();
+                //apple.TotalDestroy();
+                apple.AnimateDelete();
             }
         }
         _apples.Clear();
