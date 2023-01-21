@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class Apple : MonoBehaviour
 {
-    public int Value;
-
+    private int value;
+    public int Value   // property
+    {
+        get { return this.value; }   // get method
+        set { this.value = value; _text.text = this.value.ToString(); }  // set method
+    }
     [SerializeField] private SpriteRenderer _visual;
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -16,14 +20,64 @@ public class Apple : MonoBehaviour
     public bool Selected;
     private bool _disabled;
 
-    public void Init(int value, AppleSelectionOutline outline)
+
+    private Vector3 initialScale;
+    private bool mousedOver;
+
+    //private Vector3 scaleVelocity = Vector3.zero;
+    //public float scaleChangeTime = 0.05f;
+
+    public void Awake()
     {
-        Value = value;
-        _text.text = value.ToString();
-        _rigidbody.isKinematic = true;
-        _outline = outline;
         _disabled = false;
         Selected = false;
+
+        initialScale = transform.localScale;
+        GameManager.OnMoveCompleted += this.OnMove;
+    }
+
+    public void Update()
+    {
+        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+
+        if (mousedOver || Selected)
+        {
+            //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale * 1.2f, ref scaleVelocity, scaleChangeTime);
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale * 1.2f, 0.05f);
+        }
+        else
+        {
+            //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale, ref scaleVelocity, scaleChangeTime);
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale, 0.05f);
+        }
+    }
+
+    public virtual void OnMove() // should be overridden by special apples
+    {
+
+    }
+
+    public virtual void OnClear() // should be overridden by special apples
+    {
+        AnimateDelete();
+    }
+
+    public void OnMouseEnter()
+    {
+        mousedOver = true;
+    }
+
+    public void OnMouseExit()
+    {
+        mousedOver = false;
+    }
+
+    public virtual void Init(int value, AppleSelectionOutline outline)
+    {
+        this.Value = value;
+        _outline = outline;
+        _rigidbody.isKinematic = true;
+        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -47,6 +101,9 @@ public class Apple : MonoBehaviour
     }
     public void AnimateDelete()
     {
+
+        GameManager.OnMoveCompleted -= this.OnMove;
+
         _disabled = true;
         this.gameObject.layer = 3;
         _outline.spriteRenderer.sortingOrder = 1;
@@ -67,11 +124,6 @@ public class Apple : MonoBehaviour
     public void OnBecameInvisible()
     {
         TotalDestroy();
-    }
-
-    public void Update()
-    {
-        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
     }
 
 }
