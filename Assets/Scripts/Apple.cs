@@ -34,6 +34,18 @@ public class Apple : MonoBehaviour
 
         initialScale = transform.localScale;
         GameManager.OnMoveCompleted += this.OnMove;
+
+        // change to random animation frame 
+        Animator animator = _visual.GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.speed = Random.Range(0.9f, 1.1f);
+            AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);//could replace 0 by any other animation layer index
+            animator.Play(state.fullPathHash, -1, Random.Range(0f, 1f));
+
+            //https://forums.tigsource.com/index.php?topic=49645.0
+        }
+
     }
 
     public void Update()

@@ -700,7 +700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _width: 7
   _height: 12
-  _applePrefab: {fileID: 1614717124458135677, guid: 5804323c8fb8d2342b19f4165ee75020, type: 3}
+  _applePrefab: {fileID: 646388590648781159, guid: 4c6782761a458094b8082d2cfe1d487d, type: 3}
   _appleSelectionOutlinePrefab: {fileID: 8345021586730224130, guid: 1c5d09267e4169e488266b0902e2b0a7, type: 3}
   _selectionBoxPrefab: {fileID: 3257941525532887977, guid: 43a2693c725a8704bb0c7e6e17ff4abf, type: 3}
   _background: {fileID: 2672929996072509335}
@@ -712,7 +712,7 @@ MonoBehaviour:
   initialMousePosition: {x: 0, y: 0}
   currentMousePosition: {x: 0, y: 0}
   _state: 0
-  targetTime: 60
+  targetTime: 120
 --- !u!4 &1153440971
 Transform:
   m_ObjectHideFlags: 0
