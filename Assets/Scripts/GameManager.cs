@@ -208,10 +208,10 @@ public class GameManager : MonoBehaviour
             var temp = new List<Apple>();
             for (int y = 0; y < height; y++)
             {
-                AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
-                outline.gameObject.SetActive(false);
+                //AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
+                //outline.gameObject.SetActive(false);
                 var node = Instantiate(_applePrefab, new Vector2(x, y), Quaternion.identity);
-                node.Init(UnityEngine.Random.Range(1, 10), outline);
+                node.Init(UnityEngine.Random.Range(1, 10));
                 temp.Add(node);
             }
             _apples.Add(temp);

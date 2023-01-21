@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class NegativeApple : Apple
 {
-    public override void Init(int value, AppleSelectionOutline outline)
+    public override void Init(int value)
     {
-        base.Init(-value, outline);
+        base.Init(-value);
     }
 }
