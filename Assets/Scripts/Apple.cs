@@ -127,11 +127,15 @@ public class Apple : MonoBehaviour
         _boxCollider.enabled = false;
     }
 
-    public void OnBecameInvisible()
+    public void TotalDestroy()
     {
         Destroy(gameObject);
         Destroy(_outline.gameObject);
-        
+    }
+
+    public void OnBecameInvisible()
+    {
+        TotalDestroy();
     }
 
 }
