@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Apple : Shakeable
+public class Apple : MonoBehaviour
 {
     private int value;
     public int Value   // property
@@ -24,14 +24,16 @@ public class Apple : Shakeable
     private Vector3 initialScale;
     private bool mousedOver;
 
+    //private Vector3 scaleVelocity = Vector3.zero;
+    //public float scaleChangeTime = 0.05f;
+
     public void Awake()
     {
         _disabled = false;
         Selected = false;
 
         initialScale = transform.localScale;
-
-
+        GameManager.OnMoveCompleted += this.OnMove;
     }
 
     public void Update()
@@ -40,10 +42,12 @@ public class Apple : Shakeable
 
         if (mousedOver || Selected)
         {
+            //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale * 1.2f, ref scaleVelocity, scaleChangeTime);
             transform.localScale = Vector3.Lerp(transform.localScale, initialScale * 1.2f, 0.05f);
         }
         else
         {
+            //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale, ref scaleVelocity, scaleChangeTime);
             transform.localScale = Vector3.Lerp(transform.localScale, initialScale, 0.05f);
         }
     }
@@ -68,7 +72,7 @@ public class Apple : Shakeable
         mousedOver = false;
     }
 
-    public void Init(int value, AppleSelectionOutline outline)
+    public virtual void Init(int value, AppleSelectionOutline outline)
     {
         this.Value = value;
         _outline = outline;
@@ -97,6 +101,9 @@ public class Apple : Shakeable
     }
     public void AnimateDelete()
     {
+
+        GameManager.OnMoveCompleted -= this.OnMove;
+
         _disabled = true;
         this.gameObject.layer = 3;
         _outline.spriteRenderer.sortingOrder = 1;
@@ -112,6 +119,7 @@ public class Apple : Shakeable
     {
         Destroy(gameObject);
         Destroy(_outline.gameObject);
+        
     }
 
 }

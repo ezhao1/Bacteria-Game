@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     public GameState _state;
     public float targetTime = 120.0f;
 
+    public static event Action OnMoveCompleted;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -161,6 +163,9 @@ public class GameManager : MonoBehaviour
             audio.Play();
             _totalApples += _selectedApples.Count;
             _scoreText.text = _totalApples.ToString();
+            
+            OnMoveCompleted?.Invoke();
+            
             for (int i = 0; i < _selectedApples.Count; i++)
             {
                 var apple = _selectedApples[i];

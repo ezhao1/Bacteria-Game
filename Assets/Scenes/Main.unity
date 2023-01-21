@@ -551,7 +551,7 @@ GameObject:
   - component: {fileID: 962892879}
   - component: {fileID: 962892878}
   m_Layer: 0
-  m_Name: so how about that weather huh
+  m_Name: BGM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -569,7 +569,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 1e7494f73f0562d4baff91c3b151d91d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.439
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -700,7 +700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _width: 7
   _height: 12
-  _applePrefab: {fileID: 646388590648781159, guid: 4c6782761a458094b8082d2cfe1d487d, type: 3}
+  _applePrefab: {fileID: 1614717124458135677, guid: 5804323c8fb8d2342b19f4165ee75020, type: 3}
   _appleSelectionOutlinePrefab: {fileID: 8345021586730224130, guid: 1c5d09267e4169e488266b0902e2b0a7, type: 3}
   _selectionBoxPrefab: {fileID: 3257941525532887977, guid: 43a2693c725a8704bb0c7e6e17ff4abf, type: 3}
   _background: {fileID: 2672929996072509335}
