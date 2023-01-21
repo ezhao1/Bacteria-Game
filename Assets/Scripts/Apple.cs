@@ -16,14 +16,51 @@ public class Apple : MonoBehaviour
     public bool Selected;
     private bool _disabled;
 
+
+    private Vector3 initialScale;
+    private bool mousedOver;
+
+    public void Awake()
+    {
+        _disabled = false;
+        Selected = false;
+
+        initialScale = transform.localScale;
+
+
+    }
+
+    public void Update()
+    {
+        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+
+        if (mousedOver || Selected)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale * 1.2f, 0.1f);
+        }
+        else
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale, 0.1f);
+        }
+    }
+
+    public void OnMouseEnter()
+    {
+        mousedOver = true;
+    }
+
+    public void OnMouseExit()
+    {
+        mousedOver = false;
+    }
+
     public void Init(int value, AppleSelectionOutline outline)
     {
         Value = value;
         _text.text = value.ToString();
-        _rigidbody.isKinematic = true;
         _outline = outline;
-        _disabled = false;
-        Selected = false;
+        _rigidbody.isKinematic = true;
+        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -62,11 +99,6 @@ public class Apple : MonoBehaviour
     {
         Destroy(gameObject);
         Destroy(_outline.gameObject);
-    }
-
-    public void Update()
-    {
-        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
     }
 
 }
