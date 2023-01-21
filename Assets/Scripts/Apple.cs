@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Apple : MonoBehaviour
+public class Apple : Shakeable
 {
-    public int Value;
-
+    private int value;
+    public int Value   // property
+    {
+        get { return this.value; }   // get method
+        set { this.value = value; _text.text = this.value.ToString(); }  // set method
+    }
     [SerializeField] private SpriteRenderer _visual;
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -36,12 +40,22 @@ public class Apple : MonoBehaviour
 
         if (mousedOver || Selected)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, initialScale * 1.2f, 0.1f);
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale * 1.2f, 0.05f);
         }
         else
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, initialScale, 0.1f);
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale, 0.05f);
         }
+    }
+
+    public virtual void OnMove() // should be overridden by special apples
+    {
+
+    }
+
+    public virtual void OnClear() // should be overridden by special apples
+    {
+        AnimateDelete();
     }
 
     public void OnMouseEnter()
@@ -56,8 +70,7 @@ public class Apple : MonoBehaviour
 
     public void Init(int value, AppleSelectionOutline outline)
     {
-        Value = value;
-        _text.text = value.ToString();
+        this.Value = value;
         _outline = outline;
         _rigidbody.isKinematic = true;
         _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);

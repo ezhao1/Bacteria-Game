@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private int _totalApples;
 
     public GameState _state;
-    public float targetTime = 60.0f;
+    public float targetTime = 120.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < _selectedApples.Count; i++)
             {
                 var apple = _selectedApples[i];
-                apple.AnimateDelete();
+                apple.OnClear();
             }
             _selectedApples.Clear();
         }
@@ -198,7 +198,6 @@ public class GameManager : MonoBehaviour
 
     public void SelectApple(Apple apple)
     {
-        Debug.Log(apple);
         if (!_selectedApples.Contains(apple))
         {
             _selectedApples.Add(apple);
