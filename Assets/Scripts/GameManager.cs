@@ -8,8 +8,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int _width = 7; // original: 10
-    [SerializeField] private int _height = 12; // original: 17
+    [SerializeField] private int _level = 1;
     [SerializeField] private Apple _applePrefab;
     [SerializeField] private AppleSelectionOutline _appleSelectionOutlinePrefab;
     [SerializeField] private SelectionBox _selectionBoxPrefab;
@@ -18,13 +17,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private AudioClip _selection;
+    [SerializeField] private TextMeshProUGUI _levelText;
 
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] Vector2 initialMousePosition, currentMousePosition;
     private BoxCollider2D _boxColl;
     private SelectionBox _theSelectionBox;
-    private List<Apple> _selectedApples;
-    private int _totalApples;
+    private List<Apple> _selectedApples = new List<Apple>();
+    private List<List<Apple>> _apples;
+    private int _totalApples = 0;
+    private int _finalLevel = 3;
 
     public GameState _state;
     public float targetTime = 60.0f;
@@ -33,8 +35,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ScaleAccordingToScreen();
-        _selectedApples = new List<Apple>();
-        _totalApples = 0;
         ChangeState(GameState.GenerateLevel);
     }
 
@@ -45,13 +45,14 @@ public class GameManager : MonoBehaviour
         switch(newState)
         {
             case GameState.GenerateLevel:
-                SpawnInitialApples();
+                InitializeLevel();
                 break;
             case GameState.WaitingInput:
                 break;
             case GameState.Selecting:
                 break;
             case GameState.End:
+                UpdateLevel();
                 break; 
         }
     }
@@ -175,25 +176,65 @@ public class GameManager : MonoBehaviour
         _theSelectionBox = null;
     }
 
-    private void SpawnInitialApples()
+    private void InitializeLevel()
     {
-        for (int x = 0; x < _width; x++)
+        _levelText.text = _level.ToString();
+        switch(_level)
         {
-            for (int y = 0; y <_height; y++)
+            case 1:
+                targetTime = 50f;
+                SpawnApples(6, 10);
+                break;
+            case 2:
+                targetTime = 60f;
+                SpawnApples(7, 12);
+                break;
+        }
+        
+
+        ChangeState(GameState.WaitingInput);
+    }
+
+    private void SpawnApples(int width, int height)
+    {
+        _apples = new List<List<Apple>>();
+        for (int x = 0; x < width; x++)
+        {
+            var temp = new List<Apple>();
+            for (int y = 0; y < height; y++)
             {
                 AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
                 outline.gameObject.SetActive(false);
                 var node = Instantiate(_applePrefab, new Vector2(x, y), Quaternion.identity);
                 node.Init(UnityEngine.Random.Range(1, 10), outline);
+                temp.Add(node);
             }
+            _apples.Add(temp);
         }
 
-        var center = new Vector2((float)_width / 2 - 0.5f, (float)_height / 2 - 0.5f);
+        var center = new Vector2((float)width / 2 - 0.5f, (float)height / 2 - 0.5f);
 
-        Camera.main.transform.position = new Vector3(center.x, center.y +0.55f, -10);
+        Camera.main.transform.position = new Vector3(center.x, center.y + 0.55f, -10);
         _background.transform.position = new Vector2(center.x, center.y);
+    }
 
-        ChangeState(GameState.WaitingInput);
+    private void UpdateLevel()
+    {
+        DestroyApples();
+        _level++;
+        if (_level == _finalLevel)
+        {
+            EndGame();
+        }
+        else
+        {
+            ChangeState(GameState.GenerateLevel);
+        }
+    }
+
+    private void EndGame()
+    {
+
     }
 
     public void SelectApple(Apple apple)
@@ -236,6 +277,18 @@ public class GameManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void DestroyApples()
+    {
+        foreach(List<Apple> row in _apples)
+        {
+            foreach(Apple apple in row)
+            {
+                apple.TotalDestroy();
+            }
+        }
+        _apples.Clear();
     }
 }
 
