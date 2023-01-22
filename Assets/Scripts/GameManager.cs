@@ -54,17 +54,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // guest login with lootlocker
-        LootLockerSDKManager.StartGuestSession((response) =>
-        {
-            if (!response.success)
-            {
-                Debug.Log("error starting LootLocker session");
-                return;
-            }
-
-            Debug.Log("successfully started LootLocker session");
-        });
 
         ScaleAccordingToScreen();
         ChangeState(GameState.GenerateLevel);

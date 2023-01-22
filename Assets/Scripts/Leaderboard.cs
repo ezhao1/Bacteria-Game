@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Leaderboard : MonoBehaviour
 {
@@ -14,17 +15,7 @@ public class Leaderboard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LootLockerSDKManager.StartGuestSession((response) =>
-        {
-            if (!response.success)
-            {
-                Debug.Log("error starting LootLocker session");
-                return;
-            }
-
-            Debug.Log("successfully started LootLocker session");
-            GetLeaderboardMembers(Constants.LeaderboardCount);
-        });
+        GetLeaderboardMembers(Constants.LeaderboardCount);
     }
 
     // Update is called once per frame
@@ -61,5 +52,10 @@ public class Leaderboard : MonoBehaviour
                 Debug.Log("failed: " + response.Error);
             }
         });
+    }
+
+    public void GoBack()
+    {
+        SceneManager.LoadScene(0);
     }
 }
