@@ -288,7 +288,7 @@ public class GameManager : MonoBehaviour
 
                 Apple applePrefabToSpawn = SelectRandomApplePrefab();
                 var node = Instantiate(applePrefabToSpawn, new Vector2(x, y), Quaternion.identity);
-                node.Init(UnityEngine.Random.Range(1, 10), outline);
+                node.Init(UnityEngine.Random.Range(1, 10));
                 temp.Add(node);
             }
             _apples.Add(temp);

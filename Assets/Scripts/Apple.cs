@@ -87,6 +87,7 @@ public class Apple : MonoBehaviour
     public virtual void Init(int value)
     {
         this.Value = value;
+        Debug.Log(Value);
         //_outline = outline;
         _rigidbody.isKinematic = true;
         //_outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
