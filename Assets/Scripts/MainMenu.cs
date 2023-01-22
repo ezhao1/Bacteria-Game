@@ -7,6 +7,7 @@ using LootLocker.Requests;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] TMP_InputField _nameInputField;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class MainMenu : MonoBehaviour
 
             Debug.Log("successfully started LootLocker session");
         });
+        _nameInputField.text = PlayerPrefs.GetString(Constants.NamePlayerPref);
     }
 
     // Update is called once per frame
@@ -42,5 +44,10 @@ public class MainMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void StoreName(string name)
+    {
+        PlayerPrefs.SetString(Constants.NamePlayerPref, name);
     }
 }

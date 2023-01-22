@@ -300,7 +300,8 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        LootLockerSDKManager.SubmitScore("Test", _totalApples, Constants.LeaderboardKey, (response) =>
+        PlayerPrefs.SetInt(Constants.HighestScorePlayerPref, _totalApples);
+        LootLockerSDKManager.SubmitScore(PlayerPrefs.GetString(Constants.NamePlayerPref, ""), _totalApples, Constants.LeaderboardKey, PlayerPrefs.GetString(Constants.NamePlayerPref), (response) =>
         {
             if (response.statusCode == 200)
             {

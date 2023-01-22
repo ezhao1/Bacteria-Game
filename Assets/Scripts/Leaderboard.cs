@@ -31,9 +31,12 @@ public class Leaderboard : MonoBehaviour
         {
             GameObject newGo = Instantiate(rowPrefab, rowsParent);
             TextMeshProUGUI[] texts = newGo.GetComponentsInChildren<TextMeshProUGUI>();
-            texts[0].text = item.rank.ToString() + ". " + "Guest-" + item.player.id.ToString();
+            texts[0].text = item.metadata != "" ? item.rank.ToString() + ". " + item.metadata : item.rank.ToString() + ". " + "Guest-" + item.player.id.ToString();
+            //texts[0].text = item.rank.ToString() + ". " + "Guest-" + item.player.id.ToString();
             //Debug.Log("PLAYER: " + item.player.name);
             texts[1].text = item.score.ToString();
+
+            Debug.Log(item.player.name);
         }
     }
 
