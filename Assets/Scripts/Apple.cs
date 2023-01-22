@@ -69,14 +69,14 @@ public class Apple : MonoBehaviour
         if (mousedOver || Selected)
         {
             //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale * 1.2f, ref scaleVelocity, scaleChangeTime);
-            transform.localScale = Vector3.Slerp(transform.localScale, initialScale * 1.2f, 0.05f);
+            transform.localScale = Vector3.Slerp(transform.localScale, initialScale * 1.2f, Time.deltaTime * 5f);
         }
         else
         {
             //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale, ref scaleVelocity, scaleChangeTime);
-            transform.localScale = Vector3.Slerp(transform.localScale, initialScale, 0.05f);
+            transform.localScale = Vector3.Slerp(transform.localScale, initialScale, Time.deltaTime * 5f);
         }
-        transform.position = Vector3.Lerp(transform.position, initialPosition, 0.01f);
+        transform.position = Vector3.Lerp(transform.position, initialPosition, Time.deltaTime * 2.5f);
     }
 
     public virtual void OnMove() // should be overridden by special apples

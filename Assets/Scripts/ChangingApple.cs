@@ -14,6 +14,6 @@ public class ChangingApple : Apple
     public void Update()
     {
         base.Update();
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, 0.05f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);
     }
 }
