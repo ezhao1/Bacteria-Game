@@ -56,8 +56,7 @@ public class Apple : MonoBehaviour
     }
     public void Start()
     {
-        Vector3 centerPos = new Vector3(GameManager.Instance.CurrentLevelSettings.width / 2f - 0.5f, GameManager.Instance.CurrentLevelSettings.height / 2f - 0.5f);
-        Debug.Log(centerPos);
+        Vector3 centerPos = new Vector3(GameManager.Instance.CurrentLevelSettings.width / 2f - 0.5f, GameManager.Instance.CurrentLevelSettings.height / 2f - 0.5f) + GameManager.Instance.AppleOrigin;
 
         transform.position += (initialPosition - centerPos) * 10;
     }

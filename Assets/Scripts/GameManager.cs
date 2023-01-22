@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] Vector2 initialMousePosition, currentMousePosition;
+    [SerializeField] private Vector3 appleOrigin;
+    public Vector3 AppleOrigin => appleOrigin;
+
     private BoxCollider2D _boxColl;
     private SelectionBox _theSelectionBox;
     private List<Apple> _selectedApples = new List<Apple>();
@@ -35,6 +38,7 @@ public class GameManager : MonoBehaviour
     private int _totalApples = 0;
 
     private int applesClearedInLevel = 0;
+    public int ApplesClearedInLevel => applesClearedInLevel;
 
     public GameState _state;
     public float targetTime = 60.0f;
@@ -277,11 +281,11 @@ public class GameManager : MonoBehaviour
             var temp = new List<Apple>();
             for (int y = 0; y < height; y++)
             {
-                AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
+                AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x + appleOrigin.x, y + appleOrigin.y), Quaternion.identity);
                 outline.gameObject.SetActive(false);
 
                 Apple applePrefabToSpawn = SelectRandomApplePrefab();
-                var node = Instantiate(applePrefabToSpawn, new Vector2(x, y), Quaternion.identity);
+                var node = Instantiate(applePrefabToSpawn, new Vector2(x + appleOrigin.x, y + appleOrigin.y), Quaternion.identity);
                 node.Init(UnityEngine.Random.Range(1, 10), outline);
                 temp.Add(node);
             }
@@ -365,6 +369,10 @@ public class GameManager : MonoBehaviour
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void GoHome()
+    {
+        SceneManager.LoadScene(0);
     }
 }
 
