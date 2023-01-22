@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
     private List<List<Apple>> _apples;
     private int _totalApples = 0;
 
-
     private int applesClearedInLevel = 0;
 
     public GameState _state;
@@ -42,13 +41,19 @@ public class GameManager : MonoBehaviour
 
     public List<Level> levels;
     private Level currentLevelSettings;
+    public Level CurrentLevelSettings => currentLevelSettings;
+
     [SerializeField] private int _level = 0;
 
-    public static event Action OnMoveCompleted;
+    public event Action OnMoveCompleted;
+
+    private static GameManager instance;
+    public static GameManager Instance => instance;
 
     void Awake()
     {
         currentLevelSettings = levels[_level];
+        instance = this;
     }
 
     // Start is called before the first frame update
@@ -272,12 +277,12 @@ public class GameManager : MonoBehaviour
             var temp = new List<Apple>();
             for (int y = 0; y < height; y++)
             {
-                //AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
-                //outline.gameObject.SetActive(false);
+                AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
+                outline.gameObject.SetActive(false);
 
                 Apple applePrefabToSpawn = SelectRandomApplePrefab();
                 var node = Instantiate(applePrefabToSpawn, new Vector2(x, y), Quaternion.identity);
-                node.Init(UnityEngine.Random.Range(1, 10));
+                node.Init(UnityEngine.Random.Range(1, 10), outline);
                 temp.Add(node);
             }
             _apples.Add(temp);
