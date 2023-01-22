@@ -3,13 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int _level = 1;
+    
     [SerializeField] private Apple _applePrefab;
+    [SerializeField] private Apple _changingApplePrefab;
+    [SerializeField] private Apple _halvingApplePrefab;
+    [SerializeField] private Apple _negativeApplePrefab;
+
     [SerializeField] private AppleSelectionOutline _appleSelectionOutlinePrefab;
     [SerializeField] private SelectionBox _selectionBoxPrefab;
     [SerializeField] private SpriteRenderer _background;
@@ -18,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private AudioClip _selection;
     [SerializeField] private TextMeshProUGUI _levelText;
+    [SerializeField] private TextMeshProUGUI _levelProgressText;
 
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] Vector2 initialMousePosition, currentMousePosition;
@@ -26,12 +32,23 @@ public class GameManager : MonoBehaviour
     private List<Apple> _selectedApples = new List<Apple>();
     private List<List<Apple>> _apples;
     private int _totalApples = 0;
-    private int _finalLevel = 3;
+
+
+    private int applesClearedInLevel = 0;
 
     public GameState _state;
-    public float targetTime = 10.0f;
+    public float targetTime = 60.0f;
+
+    public List<Level> levels;
+    private Level currentLevelSettings;
+    [SerializeField] private int _level = 0;
 
     public static event Action OnMoveCompleted;
+
+    void Awake()
+    {
+        currentLevelSettings = levels[_level];
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +71,7 @@ public class GameManager : MonoBehaviour
             case GameState.Selecting:
                 break;
             case GameState.End:
-                UpdateLevel();
+                EndGame();
                 break; 
         }
     }
@@ -155,6 +172,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void UpdateScoreText()
+    {
+        _levelProgressText.text = applesClearedInLevel.ToString() + "/" + currentLevelSettings.requiredToClear.ToString();
+        _scoreText.text = _totalApples.ToString();
+    }
+
     private void HandleUnclick()
     {
         if (IsAMatch())
@@ -162,17 +185,28 @@ public class GameManager : MonoBehaviour
             AudioSource audio = GetComponent<AudioSource>();
             audio.clip = _selection;
             audio.Play();
+            
             _totalApples += _selectedApples.Count;
-            _scoreText.text = _totalApples.ToString();
+            applesClearedInLevel += _selectedApples.Count;
+
+
+            UpdateScoreText();
             
             OnMoveCompleted?.Invoke();
             
+
             for (int i = 0; i < _selectedApples.Count; i++)
             {
                 var apple = _selectedApples[i];
                 apple.OnClear();
             }
             _selectedApples.Clear();
+            
+            if (applesClearedInLevel >= currentLevelSettings.requiredToClear)
+            {
+                UpdateLevel();
+            }
+
         }
         _lineRenderer.positionCount = 0;
         Destroy(_boxColl);
@@ -183,21 +217,49 @@ public class GameManager : MonoBehaviour
 
     private void InitializeLevel()
     {
-        _levelText.text = _level.ToString();
-        switch(_level)
-        {
-            case 1:
-                targetTime = 10f;
-                SpawnApples(6, 10);
-                break;
-            case 2:
-                targetTime = 60f;
-                SpawnApples(7, 12);
-                break;
-        }
-        
-
+        _levelText.text = (_level+1).ToString();
+        applesClearedInLevel = 0;
+        SpawnApples(currentLevelSettings.width, currentLevelSettings.height);
+        UpdateScoreText();
         ChangeState(GameState.WaitingInput);
+    }
+
+    private void UpdateLevel()
+    {
+        DestroyApples();
+        _level++;
+
+        if (_level < levels.Count)
+        {
+            currentLevelSettings = levels[_level];
+        }
+        targetTime += currentLevelSettings.additionalTime;
+        ChangeState(GameState.GenerateLevel);
+
+    }
+
+    private Apple SelectRandomApplePrefab()
+    {
+        float roll = UnityEngine.Random.Range(0f, 1f);
+        float chanceCounter = currentLevelSettings.changingAppleChance;
+        if (chanceCounter > roll)
+        {
+            return _changingApplePrefab;
+        }
+
+        chanceCounter += currentLevelSettings.halvingAppleChance;
+        if (chanceCounter > roll)
+        {
+            return _halvingApplePrefab;
+        }
+
+        chanceCounter += currentLevelSettings.negativeAppleChance;
+        if (chanceCounter > roll)
+        {
+            return _negativeApplePrefab;
+        }
+
+        return _applePrefab;
     }
 
     private void SpawnApples(int width, int height)
@@ -210,7 +272,9 @@ public class GameManager : MonoBehaviour
             {
                 AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
                 outline.gameObject.SetActive(false);
-                var node = Instantiate(_applePrefab, new Vector2(x, y), Quaternion.identity);
+
+                Apple applePrefabToSpawn = SelectRandomApplePrefab();
+                var node = Instantiate(applePrefabToSpawn, new Vector2(x, y), Quaternion.identity);
                 node.Init(UnityEngine.Random.Range(1, 10), outline);
                 temp.Add(node);
             }
@@ -221,20 +285,6 @@ public class GameManager : MonoBehaviour
 
         Camera.main.transform.position = new Vector3(center.x, center.y + 0.55f, -10);
         _background.transform.position = new Vector2(center.x, center.y);
-    }
-
-    private void UpdateLevel()
-    {
-        DestroyApples();
-        _level++;
-        if (_level == _finalLevel)
-        {
-            EndGame();
-        }
-        else
-        {
-            ChangeState(GameState.GenerateLevel);
-        }
     }
 
     private void EndGame()
@@ -294,6 +344,10 @@ public class GameManager : MonoBehaviour
             }
         }
         _apples.Clear();
+    }
+    public void ResetLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
 
