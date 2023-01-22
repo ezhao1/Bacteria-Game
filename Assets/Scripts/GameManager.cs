@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        LootLockerSDKManager.SubmitScore("Test", _totalApples, "LeaderboardKey", (response) =>
+        LootLockerSDKManager.SubmitScore("Test", _totalApples, Constants.LeaderboardKey, (response) =>
         {
             if (response.statusCode == 200)
             {
