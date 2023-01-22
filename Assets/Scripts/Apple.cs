@@ -15,7 +15,7 @@ public class Apple : MonoBehaviour
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private BoxCollider2D _boxCollider;
-    private AppleSelectionOutline _outline;
+    //private AppleSelectionOutline _outline;
 
     public bool Selected;
     private bool _disabled;
@@ -50,7 +50,7 @@ public class Apple : MonoBehaviour
 
     public void Update()
     {
-        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+        //_outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
 
         if (mousedOver || Selected)
         {
@@ -84,19 +84,19 @@ public class Apple : MonoBehaviour
         mousedOver = false;
     }
 
-    public virtual void Init(int value, AppleSelectionOutline outline)
+    public virtual void Init(int value)
     {
         this.Value = value;
-        _outline = outline;
+        //_outline = outline;
         _rigidbody.isKinematic = true;
-        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+        //_outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<GameManager>() && !_disabled) {
             Selected = true;
-            _outline.gameObject.SetActive(true);
+            //_outline.gameObject.SetActive(true);
             collision.gameObject.GetComponent<GameManager>().SelectApple(this);
         }
     }
@@ -107,7 +107,7 @@ public class Apple : MonoBehaviour
         if (gamemanager && !_disabled)
         {
             Selected = false;
-            _outline.gameObject.SetActive(false);
+            //_outline.gameObject.SetActive(false);
             gamemanager.DeselectApple(this);
         }
     }
@@ -118,7 +118,7 @@ public class Apple : MonoBehaviour
 
         _disabled = true;
         this.gameObject.layer = 3;
-        _outline.spriteRenderer.sortingOrder = 1;
+        //_outline.spriteRenderer.sortingOrder = 1;
         _visual.sortingOrder = 2;
         _text.sortingOrder = 3;
         _rigidbody.isKinematic = false;
@@ -131,7 +131,7 @@ public class Apple : MonoBehaviour
     {
         GameManager.OnMoveCompleted -= this.OnMove;
         Destroy(gameObject);
-        Destroy(_outline.gameObject);
+        //Destroy(_outline.gameObject);
     }
 
     public void OnBecameInvisible()

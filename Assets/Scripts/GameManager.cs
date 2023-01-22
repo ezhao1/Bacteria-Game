@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using LootLocker.Requests;
 
 [RequireComponent(typeof(AudioSource))]
 
@@ -53,6 +54,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // guest login with lootlocker
+        LootLockerSDKManager.StartGuestSession((response) =>
+        {
+            if (!response.success)
+            {
+                Debug.Log("error starting LootLocker session");
+                return;
+            }
+
+            Debug.Log("successfully started LootLocker session");
+        });
+
         ScaleAccordingToScreen();
         ChangeState(GameState.GenerateLevel);
     }
@@ -270,8 +283,8 @@ public class GameManager : MonoBehaviour
             var temp = new List<Apple>();
             for (int y = 0; y < height; y++)
             {
-                AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
-                outline.gameObject.SetActive(false);
+                //AppleSelectionOutline outline = Instantiate(_appleSelectionOutlinePrefab, new Vector2(x, y - 0.07f), Quaternion.identity);
+                //outline.gameObject.SetActive(false);
 
                 Apple applePrefabToSpawn = SelectRandomApplePrefab();
                 var node = Instantiate(applePrefabToSpawn, new Vector2(x, y), Quaternion.identity);
@@ -289,7 +302,17 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-
+        LootLockerSDKManager.SubmitScore("Test", _totalApples, Constants.LeaderboardKey, (response) =>
+        {
+            if (response.statusCode == 200)
+            {
+                Debug.Log("Successful");
+            }
+            else
+            {
+                Debug.Log("failed: " + response.Error);
+            }
+        });
     }
 
     public void SelectApple(Apple apple)
