@@ -10,7 +10,9 @@ using LootLocker.Requests;
 
 public class GameManager : MonoBehaviour
 {
-    
+
+    [Header("Prefabs")]
+
     [SerializeField] private Apple _applePrefab;
     [SerializeField] private Apple _changingApplePrefab;
     [SerializeField] private Apple _halvingApplePrefab;
@@ -18,18 +20,42 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private AppleSelectionOutline _appleSelectionOutlinePrefab;
     [SerializeField] private SelectionBox _selectionBoxPrefab;
+
+    [Header("UI")]
+
     [SerializeField] private SpriteRenderer _background;
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private Camera _camera;
     [SerializeField] private TextMeshProUGUI _timerText;
-    [SerializeField] private AudioClip _selection;
+    
     [SerializeField] private TextMeshProUGUI _levelText;
     [SerializeField] private TextMeshProUGUI _levelProgressText;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip _defaultClearSFX;
+    [SerializeField] private AudioClip _clear3SFX;
+    [SerializeField] private AudioClip _clear4SFX;
+    [SerializeField] private AudioClip _clear5SFX;
+
+    [Header("SelectionBox Things")]
+
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] Vector2 initialMousePosition, currentMousePosition;
+
+
+    [Header("Level Configuration")]
     [SerializeField] private Vector3 appleOrigin;
     public Vector3 AppleOrigin => appleOrigin;
+
+    private int applesClearedInLevel = 0;
+    public int ApplesClearedInLevel => applesClearedInLevel;
+
+    public List<Level> levels;
+    private Level currentLevelSettings;
+    public Level CurrentLevelSettings => currentLevelSettings;
+
+    [SerializeField] private int _level = 0;
+
 
     private BoxCollider2D _boxColl;
     private SelectionBox _theSelectionBox;
@@ -37,17 +63,12 @@ public class GameManager : MonoBehaviour
     private List<List<Apple>> _apples;
     private int _totalApples = 0;
 
-    private int applesClearedInLevel = 0;
-    public int ApplesClearedInLevel => applesClearedInLevel;
+    
 
     public GameState _state;
-    public float targetTime = 60.0f;
+    public float targetTime = 120.0f;
 
-    public List<Level> levels;
-    private Level currentLevelSettings;
-    public Level CurrentLevelSettings => currentLevelSettings;
-
-    [SerializeField] private int _level = 0;
+    
 
     public event Action OnMoveCompleted;
 
@@ -91,6 +112,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         Select();
+
+        if (Input.GetKeyDown("r"))
+        {
+            ResetLevel();
+        }
+
         if (_state == GameState.WaitingInput || _state == GameState.Selecting)
         {
             HandleTimer();
@@ -189,17 +216,36 @@ public class GameManager : MonoBehaviour
         _scoreText.text = _totalApples.ToString();
     }
 
+    private void PlayClearSFX(int cleared)
+    {
+        if (cleared >= 5)
+        {
+            AudioManager.Instance.PlaySound(_clear5SFX);
+        }
+        else if (cleared >= 4)
+        {
+            AudioManager.Instance.PlaySound(_clear4SFX);
+        }
+        else if (cleared >= 3)
+        {
+            AudioManager.Instance.PlaySound(_clear3SFX);
+        }
+        else
+        {
+            AudioManager.Instance.PlaySound(_defaultClearSFX);
+        }
+        
+    }
+
     private void HandleUnclick()
     {
         if (IsAMatch())
         {
-            AudioSource audio = GetComponent<AudioSource>();
-            audio.clip = _selection;
-            audio.Play();
+            
             
             _totalApples += _selectedApples.Count;
             applesClearedInLevel += _selectedApples.Count;
-
+            PlayClearSFX(_selectedApples.Count);
 
             UpdateScoreText();
             

@@ -31,12 +31,16 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Main");
     }
 
     public void GoToLeaderboard()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene("Leaderboard");
+    }
+    public void GoToSettings()
+    {
+        SceneManager.LoadScene("Settings");
     }
 
     public void QuitGame()

@@ -16,8 +16,8 @@ public class TimerBG : MonoBehaviour
     public float radians;
 
     private float initialTime;
-    public float bottomYCoord = -3;
-    public float topYCoord = 10;
+    public float bottomYCoord;
+    public float topYCoord;
     private float yOffset;
 
     void Awake()
