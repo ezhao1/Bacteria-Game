@@ -15,13 +15,14 @@ public class Apple : MonoBehaviour
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private BoxCollider2D _boxCollider;
-    //private AppleSelectionOutline _outline;
+    private AppleSelectionOutline _outline;
 
     public bool Selected;
     private bool _disabled;
 
 
     private Vector3 initialScale;
+    private Vector3 initialPosition;
     private bool mousedOver;
 
     //private Vector3 scaleVelocity = Vector3.zero;
@@ -33,7 +34,13 @@ public class Apple : MonoBehaviour
         Selected = false;
 
         initialScale = transform.localScale;
-        GameManager.OnMoveCompleted += this.OnMove;
+        initialPosition = transform.position;
+        GameManager.Instance.OnMoveCompleted += this.OnMove;
+
+        // cool juice things
+        transform.localScale = Vector3.zero;
+
+        
 
         // change to random animation frame 
         Animator animator = _visual.GetComponent<Animator>();
@@ -47,21 +54,29 @@ public class Apple : MonoBehaviour
         }
 
     }
+    public void Start()
+    {
+        Vector3 centerPos = new Vector3(GameManager.Instance.CurrentLevelSettings.width / 2f - 0.5f, GameManager.Instance.CurrentLevelSettings.height / 2f - 0.5f);
+        Debug.Log(centerPos);
+
+        transform.position += (initialPosition - centerPos) * 10;
+    }
 
     public void Update()
     {
-        //_outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
 
         if (mousedOver || Selected)
         {
             //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale * 1.2f, ref scaleVelocity, scaleChangeTime);
-            transform.localScale = Vector3.Lerp(transform.localScale, initialScale * 1.2f, 0.05f);
+            transform.localScale = Vector3.Slerp(transform.localScale, initialScale * 1.2f, 0.05f);
         }
         else
         {
             //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale, ref scaleVelocity, scaleChangeTime);
-            transform.localScale = Vector3.Lerp(transform.localScale, initialScale, 0.05f);
+            transform.localScale = Vector3.Slerp(transform.localScale, initialScale, 0.05f);
         }
+        transform.position = Vector3.Lerp(transform.position, initialPosition, 0.01f);
     }
 
     public virtual void OnMove() // should be overridden by special apples
@@ -84,20 +99,19 @@ public class Apple : MonoBehaviour
         mousedOver = false;
     }
 
-    public virtual void Init(int value)
+    public virtual void Init(int value, AppleSelectionOutline outline)
     {
         this.Value = value;
-        Debug.Log(Value);
-        //_outline = outline;
+        _outline = outline;
         _rigidbody.isKinematic = true;
-        //_outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+        _outline.transform.position = transform.position;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<GameManager>() && !_disabled) {
             Selected = true;
-            //_outline.gameObject.SetActive(true);
+            _outline.gameObject.SetActive(true);
             collision.gameObject.GetComponent<GameManager>().SelectApple(this);
         }
     }
@@ -108,18 +122,19 @@ public class Apple : MonoBehaviour
         if (gamemanager && !_disabled)
         {
             Selected = false;
-            //_outline.gameObject.SetActive(false);
+            _outline.gameObject.SetActive(false);
             gamemanager.DeselectApple(this);
         }
     }
     public void AnimateDelete()
     {
 
-        GameManager.OnMoveCompleted -= this.OnMove;
+        GameManager.Instance.OnMoveCompleted -= this.OnMove;
+        _outline.spriteRenderer.enabled = false;
 
         _disabled = true;
         this.gameObject.layer = 3;
-        //_outline.spriteRenderer.sortingOrder = 1;
+        _outline.spriteRenderer.sortingOrder = 1;
         _visual.sortingOrder = 2;
         _text.sortingOrder = 3;
         _rigidbody.isKinematic = false;
@@ -130,9 +145,9 @@ public class Apple : MonoBehaviour
 
     public void TotalDestroy()
     {
-        GameManager.OnMoveCompleted -= this.OnMove;
+        GameManager.Instance.OnMoveCompleted -= this.OnMove;
         Destroy(gameObject);
-        //Destroy(_outline.gameObject);
+        Destroy(_outline.gameObject);
     }
 
     public void OnBecameInvisible()
