@@ -44,6 +44,11 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Settings");
     }
+    public void GoToTutorial()
+    {
+        SceneManager.LoadScene("HowToPlay");
+    }
+
 
     public void QuitGame()
     {

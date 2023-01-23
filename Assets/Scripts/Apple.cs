@@ -35,7 +35,11 @@ public class Apple : MonoBehaviour
 
         initialScale = transform.localScale;
         initialPosition = transform.position;
-        GameManager.Instance.OnMoveCompleted += this.OnMove;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnMoveCompleted += this.OnMove;
+        }
+        
 
         // cool juice things
         transform.localScale = Vector3.zero;
@@ -56,14 +60,21 @@ public class Apple : MonoBehaviour
     }
     public void Start()
     {
-        Vector3 centerPos = new Vector3(GameManager.Instance.CurrentLevelSettings.width / 2f - 0.5f, GameManager.Instance.CurrentLevelSettings.height / 2f - 0.5f) + GameManager.Instance.AppleOrigin;
+        if (GameManager.Instance != null)
+        {
+            Vector3 centerPos = new Vector3(GameManager.Instance.CurrentLevelSettings.width / 2f - 0.5f, GameManager.Instance.CurrentLevelSettings.height / 2f - 0.5f) + GameManager.Instance.AppleOrigin;
 
-        transform.position += (initialPosition - centerPos) * 10;
+            transform.position += (initialPosition - centerPos) * 10;
+        }        
     }
 
     public void Update()
     {
-        _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+        if (_outline != null)
+        {
+            _outline.transform.position = new Vector2(transform.position.x, transform.position.y - 0.07f);
+        }
+        
 
         if (mousedOver || Selected)
         {
