@@ -43,6 +43,11 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(click);
     }
 
+    public void RestartBGM()
+    {
+        musicSource.Play();
+    }
+
     // Update is called once per frame
     void Update()
     {

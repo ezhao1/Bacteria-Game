@@ -59,6 +59,7 @@ public class Leaderboard : MonoBehaviour
 
     public void GoBack()
     {
+        AudioManager.Instance.PlayClick();
         SceneManager.LoadScene(0);
     }
 }
