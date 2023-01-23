@@ -14,4 +14,9 @@ public class Constants
     public const string HighestScorePlayerPref = "HighestScore";
     public const string NamePlayerPref = "Name";
     #endregion
+
+    #region UI strings
+    public const string ScoreLabel = "Your score was ";
+    public const string HighScoreLabel = "Best score: ";
+    #endregion
 }
