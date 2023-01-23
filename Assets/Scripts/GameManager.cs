@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _levelText;
     [SerializeField] private TextMeshProUGUI _levelProgressText;
 
+    [SerializeField] private GameObject _gameOverScreen;
+    [SerializeField] private TextMeshProUGUI _gameOverScoreText;
+    [SerializeField] private TextMeshProUGUI _gameOverHighScoreText;
+
     [Header("SFX")]
     [SerializeField] private AudioClip _defaultClearSFX;
     [SerializeField] private AudioClip _clear3SFX;
@@ -348,7 +352,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        PlayerPrefs.SetInt(Constants.HighestScorePlayerPref, _totalApples);
+        PlayerPrefs.SetInt(Constants.HighestScorePlayerPref, Math.Max(_totalApples, PlayerPrefs.GetInt(Constants.HighestScorePlayerPref)));
         LootLockerSDKManager.SubmitScore(PlayerPrefs.GetString(Constants.NamePlayerPref, ""), _totalApples, Constants.LeaderboardKey, PlayerPrefs.GetString(Constants.NamePlayerPref), (response) =>
         {
             if (response.statusCode == 200)
@@ -360,6 +364,9 @@ public class GameManager : MonoBehaviour
                 Debug.Log("failed: " + response.Error);
             }
         });
+        _gameOverScreen.SetActive(true);
+        _gameOverScoreText.text = Constants.ScoreLabel + _totalApples.ToString() + ".";
+        _gameOverHighScoreText.text = Constants.HighScoreLabel + PlayerPrefs.GetInt(Constants.HighestScorePlayerPref).ToString();
     }
 
     public void SelectApple(Apple apple)
@@ -422,6 +429,11 @@ public class GameManager : MonoBehaviour
     public void GoHome()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void GoToLeaderboard()
+    {
+        SceneManager.LoadScene(2);
     }
 }
 
