@@ -9,6 +9,8 @@ public class Leaderboard : MonoBehaviour
 {
     [SerializeField] public GameObject rowPrefab;
     [SerializeField] public Transform rowsParent;
+    [SerializeField] public TextMeshProUGUI _placeName;
+    [SerializeField] public TextMeshProUGUI _points;
     private LootLockerLeaderboardMember[] leaderboardMembers;
     private 
 
@@ -16,6 +18,9 @@ public class Leaderboard : MonoBehaviour
     void Start()
     {
         GetLeaderboardMembers(Constants.LeaderboardCount);
+        // get your rank
+        _placeName.text = PlayerPrefs.GetString(Constants.NamePlayerPref, "You");
+        _points.text = PlayerPrefs.GetInt(Constants.HighestScorePlayerPref, 0).ToString();
     }
 
     // Update is called once per frame
