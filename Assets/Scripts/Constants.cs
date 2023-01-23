@@ -5,8 +5,8 @@ using UnityEngine;
 public class Constants
 {
     #region LootLockerStrings
-    public const string LeaderboardKey = "LeaderboardKey";
-    //public const string LeaderboardKey = "NameLeaderboardKey";
+    //public const string LeaderboardKey = "LeaderboardKey";
+    public const string LeaderboardKey = "NameLeaderboardKey";
     public const int LeaderboardCount = 100;
     #endregion
 

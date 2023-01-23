@@ -23,8 +23,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SelectionBoxHighlightTrail _highlightTrailPrefab;
 
     [Header("UI")]
-
-    [SerializeField] private SpriteRenderer _background;
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private Camera _camera;
     [SerializeField] private TextMeshProUGUI _timerText;
@@ -126,6 +124,11 @@ public class GameManager : MonoBehaviour
         if (_state == GameState.WaitingInput || _state == GameState.Selecting)
         {
             HandleTimer();
+        }
+
+        if (_state == GameState.End)
+        {
+            _gameOverScreen.GetComponent<CanvasGroup>().alpha = Math.Min(1, _gameOverScreen.GetComponent<CanvasGroup>().alpha + Time.deltaTime);
         }
     }
 
@@ -347,7 +350,6 @@ public class GameManager : MonoBehaviour
         var center = new Vector2((float)width / 2 - 0.5f, (float)height / 2 - 0.5f);
 
         Camera.main.transform.position = new Vector3(center.x, center.y + 0.55f, -10);
-        _background.transform.position = new Vector2(center.x, center.y);
     }
 
     private void EndGame()
@@ -425,10 +427,13 @@ public class GameManager : MonoBehaviour
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        AudioManager.Instance.PlayClick();
     }
     public void GoHome()
     {
         SceneManager.LoadScene(0);
+        AudioManager.Instance.PlayClick();
     }
 
     public void GoToLeaderboard()

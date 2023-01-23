@@ -10,6 +10,8 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
+    public AudioClip click;
+
     void Awake()
     {
         if (instance != null)
@@ -34,6 +36,11 @@ public class AudioManager : MonoBehaviour
     {
         musicSource.volume = PlayerPrefs.GetFloat("MusicVolume", DEFAULT_VOLUME_VALUE);
         sfxSource.volume = PlayerPrefs.GetFloat("SFXVolume", DEFAULT_VOLUME_VALUE);
+    }
+
+    public void PlayClick()
+    {
+        sfxSource.PlayOneShot(click);
     }
 
     // Update is called once per frame

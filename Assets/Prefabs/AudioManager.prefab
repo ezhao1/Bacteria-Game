@@ -301,3 +301,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 9178193271160750358}
   sfxSource: {fileID: 9178193270905745781}
+  click: {fileID: 8300000, guid: af6e5279073ac0c4288c7c38c7a2c06e, type: 3}

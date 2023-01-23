@@ -22,7 +22,6 @@ public class SettingsMenu : MonoBehaviour
     {
         PlayerPrefs.SetFloat("MusicVolume", v);
         AudioManager.Instance.musicSource.volume = v;
-
     }
     public void SetSFXVolume(float v)
     {
@@ -39,5 +38,7 @@ public class SettingsMenu : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene("Menu");
+
+        AudioManager.Instance.PlayClick();
     }
 }
