@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private AppleSelectionOutline _appleSelectionOutlinePrefab;
     [SerializeField] private SelectionBox _selectionBoxPrefab;
+    [SerializeField] private SelectionBoxHighlightTrail _highlightTrailPrefab;
 
     [Header("UI")]
 
@@ -250,7 +251,8 @@ public class GameManager : MonoBehaviour
             UpdateScoreText();
             
             OnMoveCompleted?.Invoke();
-            
+            GameObject trail = Instantiate(_highlightTrailPrefab.gameObject, _theSelectionBox.transform.position, Quaternion.identity);
+            trail.transform.localScale = _theSelectionBox.transform.localScale;
 
             for (int i = 0; i < _selectedApples.Count; i++)
             {
