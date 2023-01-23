@@ -34,19 +34,27 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("Main");
+
+        AudioManager.Instance.PlayClick();
     }
 
     public void GoToLeaderboard()
     {
         SceneManager.LoadScene("Leaderboard");
+
+        AudioManager.Instance.PlayClick();
     }
     public void GoToSettings()
     {
         SceneManager.LoadScene("Settings");
+
+        AudioManager.Instance.PlayClick();
     }
     public void GoToTutorial()
     {
         SceneManager.LoadScene("HowToPlay");
+
+        AudioManager.Instance.PlayClick();
     }
 
 

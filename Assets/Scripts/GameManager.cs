@@ -425,10 +425,13 @@ public class GameManager : MonoBehaviour
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        AudioManager.Instance.PlayClick();
     }
     public void GoHome()
     {
         SceneManager.LoadScene(0);
+        AudioManager.Instance.PlayClick();
     }
 
     public void GoToLeaderboard()
