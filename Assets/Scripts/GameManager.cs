@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip _clear3SFX;
     [SerializeField] private AudioClip _clear4SFX;
     [SerializeField] private AudioClip _clear5SFX;
+    [SerializeField] private AudioClip _levelUpSFX;
+    [SerializeField] private AudioClip _levelInitSFX;
 
     [Header("SelectionBox Things")]
 
@@ -286,12 +288,14 @@ public class GameManager : MonoBehaviour
         applesClearedInLevel = 0;
         SpawnApples(currentLevelSettings.width, currentLevelSettings.height);
         UpdateScoreText();
+        AudioManager.Instance.PlaySound(_levelInitSFX);
         ChangeState(GameState.WaitingInput);
     }
 
     private void UpdateLevel()
     {
         DestroyApples();
+        AudioManager.Instance.PlaySound(_levelUpSFX);
         _level++;
 
         if (_level < levels.Count)
