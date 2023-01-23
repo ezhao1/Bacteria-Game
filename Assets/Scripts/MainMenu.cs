@@ -35,6 +35,7 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Main");
 
+
         AudioManager.Instance.PlayClick();
     }
 

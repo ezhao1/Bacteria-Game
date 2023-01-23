@@ -125,8 +125,7 @@ public class GameManager : MonoBehaviour
         {
             HandleTimer();
         }
-
-        if (_state == GameState.End)
+        else if (_state == GameState.End)
         {
             _gameOverScreen.GetComponent<CanvasGroup>().alpha = Math.Min(1, _gameOverScreen.GetComponent<CanvasGroup>().alpha + Time.deltaTime);
         }
