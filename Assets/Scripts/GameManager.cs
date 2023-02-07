@@ -171,6 +171,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && _state == GameState.WaitingInput)
         {
+            _selectedApples.Clear();
             ChangeState(GameState.Selecting);
             _lineRenderer.positionCount = 4;
             initialMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -275,6 +276,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
+        _selectedApples.Clear();
         _lineRenderer.positionCount = 0;
         Destroy(_boxColl);
         transform.position = Vector3.zero;
@@ -426,6 +428,7 @@ public class GameManager : MonoBehaviour
             }
         }
         _apples.Clear();
+        _selectedApples.Clear();
     }
     public void ResetLevel()
     {
