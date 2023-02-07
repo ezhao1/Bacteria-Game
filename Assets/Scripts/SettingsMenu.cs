@@ -14,6 +14,10 @@ public class SettingsMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (musicSlider == null || sfxSlider == null)
+        {
+            return;
+        }
         musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", AudioManager.DEFAULT_VOLUME_VALUE);
         sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", AudioManager.DEFAULT_VOLUME_VALUE);
     }

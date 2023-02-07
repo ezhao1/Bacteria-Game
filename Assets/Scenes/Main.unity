@@ -667,7 +667,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1456,7 +1456,8 @@ MonoBehaviour:
   _clear3SFX: {fileID: 8300000, guid: ad8b6a57d703e6f43a9e1c6571177236, type: 3}
   _clear4SFX: {fileID: 8300000, guid: 578e9ee80b9c48a4f92cb76a0440134c, type: 3}
   _clear5SFX: {fileID: 8300000, guid: 6c94166ff64dbc748b3d42cb2a2db163, type: 3}
-  _levelUpSFX: {fileID: 8300000, guid: 90aca2db2d44daa4cbab085b3bc2463b, type: 3}
+  _levelUpSFX: {fileID: 8300000, guid: df51755ce7a85c540ac383b20162511a, type: 3}
+  _levelInitSFX: {fileID: 8300000, guid: 90aca2db2d44daa4cbab085b3bc2463b, type: 3}
   _lineRenderer: {fileID: 1153440972}
   initialMousePosition: {x: 0, y: 0}
   currentMousePosition: {x: 0, y: 0}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FlyIn : MonoBehaviour
 {
-    public Vector3 flyFrom;
+    public Vector2 flyFrom;
     private Vector3 initialPosition;
     
 
@@ -13,10 +13,13 @@ public class FlyIn : MonoBehaviour
     public float delayTime = 0.1f;
     private float elapsedTime = 0f;
 
+    private RectTransform rect;
+
     void Awake()
     {
-        initialPosition = transform.position;
-        transform.position = flyFrom + transform.position;
+        rect = GetComponent<RectTransform>();
+        initialPosition = rect.anchoredPosition;
+        rect.anchoredPosition = flyFrom + rect.anchoredPosition;
     }
 
     // Update is called once per frame
@@ -29,7 +32,7 @@ public class FlyIn : MonoBehaviour
         } else
         {
 
-            transform.position = Vector3.Lerp(transform.position, initialPosition, Time.deltaTime * lerpFactor);
+            rect.anchoredPosition = Vector3.Lerp(rect.anchoredPosition, initialPosition, Time.deltaTime * lerpFactor);
         }
         
     }

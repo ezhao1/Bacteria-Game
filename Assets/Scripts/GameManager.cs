@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
 
     void ScaleAccordingToScreen()
     {
-
+        /*
         float width = Screen.safeArea.width;
         float height = Screen.safeArea.height;
         float ratio = height / width;
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
         {
             _camera.orthographicSize = 8.2f;
         }
-        
+        */
     }
 
     private void Select()
@@ -441,6 +441,8 @@ public class GameManager : MonoBehaviour
 
     public void GoToLeaderboard()
     {
+
+        AudioManager.Instance.PlayClick();
         SceneManager.LoadScene(2);
     }
 }
