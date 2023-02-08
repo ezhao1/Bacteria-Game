@@ -16,12 +16,13 @@ public class Apple : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private BoxCollider2D _boxCollider;
     private AppleSelectionOutline _outline;
+    public AppleSelectionOutline Outline => _outline;
 
     public bool Selected;
     private bool _disabled;
 
 
-    private Vector3 initialScale;
+    private Vector3 visualInitialScale;
     private Vector3 initialPosition;
     private bool mousedOver;
 
@@ -33,18 +34,16 @@ public class Apple : MonoBehaviour
         _disabled = false;
         Selected = false;
 
-        initialScale = transform.localScale;
+        visualInitialScale = _visual.transform.localScale;
         initialPosition = transform.position;
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnMoveCompleted += this.OnMove;
         }
-        
+
 
         // cool juice things
-        transform.localScale = Vector3.zero;
-
-        
+        _visual.transform.localScale = Vector3.zero;
 
         // change to random animation frame 
         Animator animator = _visual.GetComponent<Animator>();
@@ -79,12 +78,12 @@ public class Apple : MonoBehaviour
         if (mousedOver || Selected)
         {
             //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale * 1.2f, ref scaleVelocity, scaleChangeTime);
-            transform.localScale = Vector3.Slerp(transform.localScale, initialScale * 1.2f, Time.deltaTime * 5f);
+            _visual.transform.localScale = Vector3.Slerp(_visual.transform.transform.localScale, visualInitialScale * 1.2f, Time.deltaTime * 5f);
         }
         else
         {
             //transform.localScale = Vector3.SmoothDamp(transform.localScale, initialScale, ref scaleVelocity, scaleChangeTime);
-            transform.localScale = Vector3.Slerp(transform.localScale, initialScale, Time.deltaTime * 5f);
+            _visual.transform.localScale = Vector3.Slerp(_visual.transform.localScale, visualInitialScale, Time.deltaTime * 5f);
         }
         transform.position = Vector3.Lerp(transform.position, initialPosition, Time.deltaTime * 2.5f);
     }
@@ -120,8 +119,6 @@ public class Apple : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<GameManager>() && !_disabled) {
-            Selected = true;
-            _outline.gameObject.SetActive(true);
             collision.gameObject.GetComponent<GameManager>().SelectApple(this);
         }
     }
@@ -131,8 +128,6 @@ public class Apple : MonoBehaviour
         var gamemanager = collision.gameObject.GetComponent<GameManager>();
         if (gamemanager && !_disabled)
         {
-            Selected = false;
-            _outline.gameObject.SetActive(false);
             gamemanager.DeselectApple(this);
         }
     }

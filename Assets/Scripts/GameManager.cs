@@ -276,7 +276,11 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        _selectedApples.Clear();
+        for (int i = 0; i < _selectedApples.Count; i++)
+        {
+            DeselectApple(_selectedApples[i]);
+        }
+        //_selectedApples.Clear();
         _lineRenderer.positionCount = 0;
         Destroy(_boxColl);
         transform.position = Vector3.zero;
@@ -381,6 +385,8 @@ public class GameManager : MonoBehaviour
         if (!_selectedApples.Contains(apple))
         {
             _selectedApples.Add(apple);
+            apple.Selected = true;
+            apple.Outline.gameObject.SetActive(true);
         }
         ToggleSelectionColor();
     }
@@ -390,6 +396,8 @@ public class GameManager : MonoBehaviour
         if (_selectedApples.Contains(apple))
         {
             _selectedApples.Remove(apple);
+            apple.Selected = false;
+            apple.Outline.gameObject.SetActive(false);
         }
         ToggleSelectionColor();
     }
