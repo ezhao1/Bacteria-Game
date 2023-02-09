@@ -7,6 +7,7 @@ using LootLocker.Requests;
 
 public class MainMenu : MonoBehaviour
 {
+
     [SerializeField] TMP_InputField _nameInputField;
     // Start is called before the first frame update
     void Start()
