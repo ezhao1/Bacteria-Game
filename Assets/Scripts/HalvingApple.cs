@@ -14,7 +14,9 @@ public class HalvingApple : Apple
         {
             this.Value -= this.Value/2;
             BeginShake();
+            
         }
+        //GameManager.Instance.DeselectApple(this);
     }
 
 

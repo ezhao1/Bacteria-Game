@@ -267,6 +267,8 @@ public class GameManager : MonoBehaviour
             {
                 var apple = _selectedApples[i];
                 apple.OnClear();
+                apple.Selected = false;
+                apple.Outline.gameObject.SetActive(false);
             }
             _selectedApples.Clear();
             
